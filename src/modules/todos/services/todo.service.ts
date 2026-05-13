@@ -19,7 +19,7 @@ export class TodoService extends BaseService<TodoEntity, CreateTodoDto, UpdateTo
    * List all todos
    * Can filter by userId if provided
    */
-  async listTodos(userId?: string, logger?: Logger): Promise<TodoResponseDto[]> {
+  async listTodos(userId?: string, _logger?: Logger): Promise<TodoResponseDto[]> {
     try {
       let todos: TodoEntity[];
 
@@ -41,7 +41,7 @@ export class TodoService extends BaseService<TodoEntity, CreateTodoDto, UpdateTo
   /**
    * Get todo by ID
    */
-  async getTodoById(id: string, logger?: Logger): Promise<TodoResponseDto> {
+  async getTodoById(id: string, _logger?: Logger): Promise<TodoResponseDto> {
     try {
       const todo = await this.todoRepository.findById(id);
 
@@ -60,7 +60,7 @@ export class TodoService extends BaseService<TodoEntity, CreateTodoDto, UpdateTo
   /**
    * Create a new todo
    */
-  async createTodo(dto: CreateTodoDto, logger?: Logger): Promise<TodoResponseDto> {
+  async createTodo(dto: CreateTodoDto, _logger?: Logger): Promise<TodoResponseDto> {
     try {
       this.logDebug(`Creating todo for user ${dto.userId}`, { dto });
 
@@ -77,7 +77,7 @@ export class TodoService extends BaseService<TodoEntity, CreateTodoDto, UpdateTo
   /**
    * Update a todo
    */
-  async updateTodo(id: string, dto: UpdateTodoDto, logger?: Logger): Promise<TodoResponseDto> {
+  async updateTodo(id: string, dto: UpdateTodoDto, _logger?: Logger): Promise<TodoResponseDto> {
     try {
       // Check if todo exists
       const existingTodo = await this.todoRepository.findById(id);
@@ -104,7 +104,7 @@ export class TodoService extends BaseService<TodoEntity, CreateTodoDto, UpdateTo
   /**
    * Delete a todo
    */
-  async deleteTodo(id: string, logger?: Logger): Promise<void> {
+  async deleteTodo(id: string, _logger?: Logger): Promise<void> {
     try {
       // Check if todo exists
       const existingTodo = await this.todoRepository.findById(id);
@@ -133,7 +133,7 @@ export class TodoService extends BaseService<TodoEntity, CreateTodoDto, UpdateTo
   async getTodosByUser(
     userId: string,
     pagination?: { page: number; limit: number },
-    logger?: Logger
+    _logger?: Logger
   ): Promise<{ todos: TodoResponseDto[]; total: number }> {
     try {
       const result = await this.todoRepository.findByUserIdPaginated(userId, pagination);
@@ -156,7 +156,7 @@ export class TodoService extends BaseService<TodoEntity, CreateTodoDto, UpdateTo
   /**
    * Get todos by status
    */
-  async getTodosByStatus(status: string, logger?: Logger): Promise<TodoResponseDto[]> {
+  async getTodosByStatus(status: string, _logger?: Logger): Promise<TodoResponseDto[]> {
     try {
       const todos = await this.todoRepository.findByStatus(status);
 
@@ -171,7 +171,7 @@ export class TodoService extends BaseService<TodoEntity, CreateTodoDto, UpdateTo
   /**
    * Count todos
    */
-  async countTodos(filters?: Record<string, unknown>, logger?: Logger): Promise<number> {
+  async countTodos(filters?: Record<string, unknown>, _logger?: Logger): Promise<number> {
     try {
       const count = await this.todoRepository.count(filters);
       this.logDebug(`Counted ${count} todos`);

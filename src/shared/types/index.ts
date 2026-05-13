@@ -1,9 +1,6 @@
-export type {
-  AuthUser,
-  AsyncRequestHandler,
-  PaginationMeta,
-  PaginationQuery,
-  SuccessResponse,
-  ErrorResponse,
-  ApiResponse,
-} from './common.types';
+// Fallback/local definition to avoid missing-module error
+export type PaginationQuery = {
+  page?: number;
+  limit?: number;
+  [key: string]: any;
+};

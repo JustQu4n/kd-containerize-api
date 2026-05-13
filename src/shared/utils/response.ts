@@ -1,6 +1,5 @@
 import { Response } from 'express';
-import { SuccessResponseDto, ErrorResponseDto } from '../dto';
-import { PaginationMeta } from '../types/common.types';
+import { PaginationQuery } from '../types';
 
 /**
  * Send Success Response
@@ -9,7 +8,7 @@ export function sendSuccess<T>(
   res: Response,
   data: T,
   statusCode: number = 200,
-  pagination?: PaginationMeta
+  pagination?: PaginationQuery
 ): void {
   const correlationId = (res.req as any).reqId || 'unknown';
   const timestamp = new Date().toISOString();
@@ -73,7 +72,7 @@ export function setAuditResource(
  */
 export function setPaginationMeta(
   res: Response,
-  pagination: PaginationMeta
+  pagination: PaginationQuery
 ): void {
   res.locals.pagination = pagination;
 }
