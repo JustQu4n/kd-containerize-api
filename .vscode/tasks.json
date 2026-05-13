@@ -1,0 +1,21 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "test-system",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"test",
+				"--",
+				"--runInBand",
+				"test/system.test.ts"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "test"
+		}
+	]
+}
