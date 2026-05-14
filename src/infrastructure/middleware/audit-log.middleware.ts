@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuditAction } from '@/types';
-import { asyncHandler } from '@/shared/utils';
+import { AuditAction } from '../../types';
+import { asyncHandler } from '../../shared/utils';
 
 
 export function auditLog(action: AuditAction) {

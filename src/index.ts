@@ -1,3 +1,6 @@
+// Register tsconfig paths for runtime resolution
+import 'tsconfig-paths/register';
+
 import app from './app';
 import { getEnv } from './config/env';
 import { getRootLogger } from './infrastructure/logger/logger';

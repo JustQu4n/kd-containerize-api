@@ -1,9 +1,10 @@
 import { Logger } from 'pino';
-import { getRootLogger } from '@/infrastructure/logger/logger';
-import { getPrismaClient } from '@/infrastructure/database/prisma';
+
 import { TodoEntity, TodoStatus } from '../domain';
 import { CreateTodoDto, UpdateTodoDto } from '../dto';
 import { ITodoRepository } from './todo.repository.interface';
+import { getPrismaClient } from '../../../infrastructure/database/prisma';
+import { getRootLogger } from '../../../infrastructure/logger/logger';
 
 /**
  * Todo Repository Implementation

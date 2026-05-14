@@ -1,5 +1,5 @@
 import { ZodError, ZodSchema } from 'zod';
-import { ValidationError } from '@/infrastructure/errors';
+import { ValidationError } from '../../infrastructure/errors';
 
 /**
  * Validate data against Zod schema

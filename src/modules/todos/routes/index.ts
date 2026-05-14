@@ -1,9 +1,8 @@
 import { Router } from 'express';
-
-import { asyncHandler } from '@/shared/utils/async-handler';
 import { TodoService } from '../services/todo.service';
 import { TodoController } from '../controllers/todo.controller';
 import { TodoRepository } from '../repositories';
+import { asyncHandler } from '../../../shared/utils';
 
 /**
  * Todo Routes

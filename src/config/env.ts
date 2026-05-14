@@ -8,7 +8,7 @@ import { z } from 'zod';
 const envSchema = z.object({
   // App config
   NODE_ENV: z
-    .enum(['development', 'staging', 'production'])
+    .enum(['development', 'staging', 'production', 'test'])
     .default('development'),
   PORT: z.coerce.number().min(1).max(65535).default(3000),
   LOG_LEVEL: z
@@ -17,6 +17,9 @@ const envSchema = z.object({
 
   // Database
   DATABASE_URL: z.string().url('DATABASE_URL must be a valid URL'),
+
+  // Redis
+  REDIS_URL: z.string().url().optional(),
 
   // JWT (optional for now, but ready for auth module)
   JWT_SECRET: z.string().min(32).optional(),

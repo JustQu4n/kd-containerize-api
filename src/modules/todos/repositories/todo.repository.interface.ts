@@ -1,6 +1,6 @@
+import { IRepository } from '../../../shared/repositories';
 import { TodoEntity } from '../domain';
 import { CreateTodoDto, UpdateTodoDto } from '../dto';
-import { IRepository } from '@/shared/repositories';
 
 /**
  * Todo Repository Interface

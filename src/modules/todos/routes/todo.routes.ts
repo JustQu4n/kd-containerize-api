@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import { TodoController } from '../controllers/todo.controller';
-import { auditLog } from '@/infrastructure/middleware';
-import { asyncHandler } from '@/shared/utils/async-handler';
+
 import { todoRepository } from '../repositories';
 import { TodoService } from '../services';
+import { auditLog } from '../../../infrastructure/middleware';
+import { asyncHandler } from '../../../shared/utils';
 
 
 const router = Router();

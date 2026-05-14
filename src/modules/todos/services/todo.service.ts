@@ -1,9 +1,9 @@
 import { Logger } from 'pino';
-import { BaseService } from '@/shared/services';
 import { TodoEntity } from '../domain';
 import { CreateTodoDto, UpdateTodoDto, TodoResponseDto } from '../dto';
 import { ITodoRepository } from '../repositories';
-import { NotFoundError } from '@/infrastructure/errors';
+import { BaseService } from '../../../shared/services';
+import { NotFoundError } from '../../../errors';
 
 /**
  * Todo Service

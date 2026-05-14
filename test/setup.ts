@@ -1,4 +1,4 @@
-import db from '@/prisma/client';
+import db from '../src/prisma/client';
 
 beforeAll(async () => {
   await db.$connect();
