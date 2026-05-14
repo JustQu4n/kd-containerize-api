@@ -4,15 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-<<<<<<< Updated upstream
      "build": "tsc && tsc-alias",
-=======
-<<<<<<< HEAD
-    "build": "tsc && tsc-alias",
-=======
-     "build": "tsc && tsc-alias",
->>>>>>> 56a1c0220338d0bfd9ce8802249c2f90197e4c19
->>>>>>> Stashed changes
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "db:up": "docker-compose up -d",

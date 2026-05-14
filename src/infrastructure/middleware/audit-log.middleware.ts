@@ -1,13 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuditAction } from '../../types';
 import { asyncHandler } from '../../shared/utils';
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
 
->>>>>>> 56a1c0220338d0bfd9ce8802249c2f90197e4c19
 
 export function auditLog(action: AuditAction) {
   return asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

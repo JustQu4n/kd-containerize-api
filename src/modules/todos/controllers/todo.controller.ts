@@ -4,14 +4,8 @@ import { sendSuccess, setAuditResource } from '../../../shared/utils';
 import { ValidationError } from '../../../errors';
 import { CreateTodoDto, UpdateTodoDto } from '../dto';
 import { TodoStatus, VALID_STATUSES } from '../../../types';
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
 
 
->>>>>>> 56a1c0220338d0bfd9ce8802249c2f90197e4c19
 
 export class TodoController {
   constructor(private readonly service: TodoService) {}

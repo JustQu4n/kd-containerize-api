@@ -5,13 +5,7 @@ import { todoRepository } from '../repositories';
 import { TodoService } from '../services';
 import { auditLog } from '../../../infrastructure/middleware';
 import { asyncHandler } from '../../../shared/utils';
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
 
->>>>>>> 56a1c0220338d0bfd9ce8802249c2f90197e4c19
 
 const router = Router();
 
