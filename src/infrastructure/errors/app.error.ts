@@ -9,7 +9,7 @@ export class AppError extends BaseError {
     message: string,
     statusCode: number,
     code: string,
-    context?: Record<string, unknown>
+    context?: Record<string, unknown>,
   ) {
     super(message, statusCode, code, true, context);
   }
@@ -25,7 +25,7 @@ export class ValidationError extends AppError {
   constructor(
     message: string,
     fields?: Record<string, string[]>,
-    context?: Record<string, unknown>
+    context?: Record<string, unknown>,
   ) {
     super(message, 400, 'VALIDATION_ERROR', context);
     this.fields = fields;
@@ -45,9 +45,7 @@ export class ValidationError extends AppError {
  */
 export class NotFoundError extends AppError {
   constructor(resource: string, id?: string, context?: Record<string, unknown>) {
-    const message = id
-      ? `${resource} with id '${id}' not found`
-      : `${resource} not found`;
+    const message = id ? `${resource} with id '${id}' not found` : `${resource} not found`;
     super(message, 404, 'NOT_FOUND', {
       resource,
       id,

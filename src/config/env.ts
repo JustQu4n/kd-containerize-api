@@ -7,16 +7,21 @@ import { z } from 'zod';
  */
 const envSchema = z.object({
   // App config
+<<<<<<< HEAD
+  NODE_ENV: z.enum(['development', 'staging', 'production', 'test']).default('development'),
+=======
   NODE_ENV: z
-    .enum(['development', 'staging', 'production'])
+    .enum(['development', 'staging', 'production', 'test'])
     .default('development'),
+>>>>>>> 56a1c0220338d0bfd9ce8802249c2f90197e4c19
   PORT: z.coerce.number().min(1).max(65535).default(3000),
-  LOG_LEVEL: z
-    .enum(['debug', 'info', 'warn', 'error', 'fatal'])
-    .default('info'),
+  LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error', 'fatal']).default('info'),
 
   // Database
   DATABASE_URL: z.string().url('DATABASE_URL must be a valid URL'),
+
+  // Redis
+  REDIS_URL: z.string().url().optional(),
 
   // JWT (optional for now, but ready for auth module)
   JWT_SECRET: z.string().min(32).optional(),

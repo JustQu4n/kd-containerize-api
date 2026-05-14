@@ -18,7 +18,7 @@ interface ErrorResponsePayload {
 
 /**
  * Global Error Handler Middleware
- * 
+ *
  * Responsibilities:
  * - Catch all thrown errors
  * - Log appropriately based on error type
@@ -29,7 +29,7 @@ export function errorHandlerMiddleware(
   err: unknown,
   req: Request,
   res: Response,
-  _next: NextFunction
+  _next: NextFunction,
 ): void {
   const correlationId = req.reqId || 'unknown';
   const rootLogger = getRootLogger();
@@ -60,7 +60,7 @@ export function errorHandlerMiddleware(
           method: req.method,
           url: req.originalUrl,
         },
-        'Server error'
+        'Server error',
       );
     } else {
       log.warn(
@@ -70,7 +70,7 @@ export function errorHandlerMiddleware(
           method: req.method,
           url: req.originalUrl,
         },
-        'Client error'
+        'Client error',
       );
     }
 
@@ -104,7 +104,7 @@ export function errorHandlerMiddleware(
       method: req.method,
       url: req.originalUrl,
     },
-    'Unexpected error'
+    'Unexpected error',
   );
 
   res.status(500).json(payload);

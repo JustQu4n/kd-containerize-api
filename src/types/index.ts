@@ -31,12 +31,7 @@ export interface UpdateTodoDto {
 }
 
 // ─── Audit Log Types ──────────────────────────────────────────
-export type AuditAction =
-  | 'todo.create'
-  | 'todo.update'
-  | 'todo.delete'
-  | 'todo.read'
-  | 'todo.list';
+export type AuditAction = 'todo.create' | 'todo.update' | 'todo.delete' | 'todo.read' | 'todo.list';
 
 export interface AuditLogEntry {
   reqId: string;
@@ -90,8 +85,4 @@ declare global {
   }
 }
 
-export type AsyncHandler = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => Promise<void>;
+export type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<void>;

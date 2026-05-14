@@ -1,9 +1,9 @@
 import { Logger } from 'pino';
-import { BaseService } from '@/shared/services';
 import { TodoEntity } from '../domain';
 import { CreateTodoDto, UpdateTodoDto, TodoResponseDto } from '../dto';
 import { ITodoRepository } from '../repositories';
-import { NotFoundError } from '@/infrastructure/errors';
+import { BaseService } from '../../../shared/services';
+import { NotFoundError } from '../../../errors';
 
 /**
  * Todo Service
@@ -133,7 +133,7 @@ export class TodoService extends BaseService<TodoEntity, CreateTodoDto, UpdateTo
   async getTodosByUser(
     userId: string,
     pagination?: { page: number; limit: number },
-    _logger?: Logger
+    _logger?: Logger,
   ): Promise<{ todos: TodoResponseDto[]; total: number }> {
     try {
       const result = await this.todoRepository.findByUserIdPaginated(userId, pagination);

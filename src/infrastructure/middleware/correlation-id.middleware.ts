@@ -4,18 +4,14 @@ import { createRequestLogger } from '../logger/logger';
 
 /**
  * Correlation ID Middleware
- * 
+ *
  * Responsibilities:
  * - Generate or extract correlation ID from headers
  * - Attach to request for reference
  * - Create request-scoped logger
  * - Echo back in response headers
  */
-export function correlationIdMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void {
+export function correlationIdMiddleware(req: Request, res: Response, next: NextFunction): void {
   // Generate or extract correlation ID
   const correlationId =
     (req.headers['x-correlation-id'] as string) ||

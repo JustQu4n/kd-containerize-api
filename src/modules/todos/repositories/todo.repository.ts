@@ -1,9 +1,10 @@
 import { Logger } from 'pino';
-import { getRootLogger } from '@/infrastructure/logger/logger';
-import { getPrismaClient } from '@/infrastructure/database/prisma';
+
 import { TodoEntity, TodoStatus } from '../domain';
 import { CreateTodoDto, UpdateTodoDto } from '../dto';
 import { ITodoRepository } from './todo.repository.interface';
+import { getPrismaClient } from '../../../infrastructure/database/prisma';
+import { getRootLogger } from '../../../infrastructure/logger/logger';
 
 /**
  * Todo Repository Implementation
@@ -50,8 +51,11 @@ export class TodoRepository implements ITodoRepository {
    */
   async findMany(
     filters?: Record<string, unknown>,
-    pagination?: { page: number; limit: number }
-  ): Promise<{ data: TodoEntity[]; meta: { total: number; page: number; limit: number; totalPages: number } }> {
+    pagination?: { page: number; limit: number },
+  ): Promise<{
+    data: TodoEntity[];
+    meta: { total: number; page: number; limit: number; totalPages: number };
+  }> {
     try {
       const skip = pagination ? (pagination.page - 1) * pagination.limit : undefined;
       const take = pagination?.limit;
@@ -249,7 +253,7 @@ export class TodoRepository implements ITodoRepository {
    */
   async findByUserIdPaginated(
     userId: string,
-    pagination?: { page: number; limit: number }
+    pagination?: { page: number; limit: number },
   ): Promise<{ data: TodoEntity[]; total: number }> {
     try {
       const skip = pagination ? (pagination.page - 1) * pagination.limit : undefined;
@@ -272,7 +276,10 @@ export class TodoRepository implements ITodoRepository {
         total,
       };
     } catch (error) {
-      this.logger.error({ error, userId, pagination }, 'Error finding todos by userId with pagination');
+      this.logger.error(
+        { error, userId, pagination },
+        'Error finding todos by userId with pagination',
+      );
       throw error;
     }
   }

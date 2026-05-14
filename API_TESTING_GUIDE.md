@@ -1,6 +1,7 @@
 # Hướng Dẫn Test Todo API Endpoints
 
 ## 📋 Mục Lục
+
 1. [Giới Thiệu](#giới-thiệu)
 2. [Công Cụ Và Khung Làm Việc](#công-cụ-và-khung-làm-việc)
 3. [Cấu Trúc Test](#cấu-trúc-test)
@@ -13,6 +14,7 @@
 ## 🎯 Giới Thiệu
 
 Hướng dẫn này giúp bạn hiểu cách test Todo API endpoints. Todo API cung cấp các tính năng quản lý công việc bao gồm:
+
 - Tạo mới công việc (todo)
 - Lấy danh sách công việc
 - Lấy chi tiết một công việc
@@ -24,13 +26,15 @@ Hướng dẫn này giúp bạn hiểu cách test Todo API endpoints. Todo API c
 ## 🛠 Công Cụ Và Khung Làm Việc
 
 ### Công Cụ Test
-| Công Cụ | Mục Đích | Phiên Bản |
-|---------|---------|----------|
-| **Jest** | Test Runner | 29.7.0 |
-| **SuperTest** | HTTP Assertion Library | 6.3.4 |
-| **Prisma** | ORM & Database | 5.10.0 |
+
+| Công Cụ       | Mục Đích               | Phiên Bản |
+| ------------- | ---------------------- | --------- |
+| **Jest**      | Test Runner            | 29.7.0    |
+| **SuperTest** | HTTP Assertion Library | 6.3.4     |
+| **Prisma**    | ORM & Database         | 5.10.0    |
 
 ### Cấu Trúc Project
+
 ```
 test/
 ├── helpers.ts          # Hàm hỗ trợ (seed data, cleanup)
@@ -53,6 +57,7 @@ src/
 ### 1. Setup Và Cleanup
 
 **File: test/helpers.ts**
+
 ```typescript
 // Seed data cho testing
 export async function seedTodo(data?: Partial<Todo>) {
@@ -99,16 +104,16 @@ describe('Todo API', () => {
 ## 📡 Chi Tiết Các Endpoint
 
 ### 1. CREATE - POST /api/todos
+
 **Mục đích:** Tạo một công việc mới
 
 #### ✅ Test Case: Tạo Thành Công
+
 ```typescript
 it('should return 201 and the created todo for valid data', async () => {
   const todoData = { title: 'New Todo' };
-  const res = await request(app)
-    .post('/api/todos')
-    .send(todoData);
-  
+  const res = await request(app).post('/api/todos').send(todoData);
+
   expect(res.status).toBe(201);
   expect(res.body).toHaveProperty('id');
   expect(res.body.title).toBe(todoData.title);
@@ -117,77 +122,73 @@ it('should return 201 and the created todo for valid data', async () => {
 ```
 
 #### ❌ Test Case: Thiếu Title
+
 ```typescript
 it('should return 400 if title is missing', async () => {
-  const res = await request(app)
-    .post('/api/todos')
-    .send({});
-  
+  const res = await request(app).post('/api/todos').send({});
+
   expect(res.status).toBe(400);
   expect(res.body).toHaveProperty('error');
 });
 ```
 
 #### ❌ Test Case: Title Rỗng
+
 ```typescript
 it('should return 400 if title is empty string', async () => {
-  const res = await request(app)
-    .post('/api/todos')
-    .send({ title: '' });
-  
+  const res = await request(app).post('/api/todos').send({ title: '' });
+
   expect(res.status).toBe(400);
 });
 ```
 
 #### ❌ Test Case: Title Quá Dài
+
 ```typescript
 it('should return 400 if title exceeds max length', async () => {
   const longTitle = 'a'.repeat(256);
-  const res = await request(app)
-    .post('/api/todos')
-    .send({ title: longTitle });
-  
+  const res = await request(app).post('/api/todos').send({ title: longTitle });
+
   expect(res.status).toBe(400);
 });
 ```
 
 #### ⚙️ Test Case: Với Ngày Hết Hạn
+
 ```typescript
 it('should create todo with valid dueAt date', async () => {
   const dueAt = new Date();
   dueAt.setDate(dueAt.getDate() + 1);
-  
-  const todoData = { 
-    title: 'Todo with due date', 
-    dueAt: dueAt.toISOString() 
+
+  const todoData = {
+    title: 'Todo with due date',
+    dueAt: dueAt.toISOString(),
   };
-  
-  const res = await request(app)
-    .post('/api/todos')
-    .send(todoData);
-  
+
+  const res = await request(app).post('/api/todos').send(todoData);
+
   expect(res.status).toBe(201);
   expect(res.body.dueAt).toBeDefined();
 });
 ```
 
 #### ❌ Test Case: DueAt Không Hợp Lệ
+
 ```typescript
 it('should return 400 if dueAt has invalid ISO format', async () => {
-  const todoData = { 
-    title: 'Invalid Date', 
-    dueAt: 'not-a-date' 
+  const todoData = {
+    title: 'Invalid Date',
+    dueAt: 'not-a-date',
   };
-  
-  const res = await request(app)
-    .post('/api/todos')
-    .send(todoData);
-  
+
+  const res = await request(app).post('/api/todos').send(todoData);
+
   expect(res.status).toBe(400);
 });
 ```
 
 **Request Format:**
+
 ```bash
 POST /api/todos
 Content-Type: application/json
@@ -200,6 +201,7 @@ Content-Type: application/json
 ```
 
 **Response (201):**
+
 ```json
 {
   "todo": {
@@ -218,16 +220,17 @@ Content-Type: application/json
 ---
 
 ### 2. READ - GET /api/todos/:id
+
 **Mục đích:** Lấy chi tiết một công việc
 
 #### ✅ Test Case: Lấy Todo Thành Công
+
 ```typescript
 it('should return 200 and todo details for valid id', async () => {
   const todo = await seedTodo({ title: 'Test Todo' });
-  
-  const res = await request(app)
-    .get(`/api/todos/${todo.id}`);
-  
+
+  const res = await request(app).get(`/api/todos/${todo.id}`);
+
   expect(res.status).toBe(200);
   expect(res.body.todo).toBeDefined();
   expect(res.body.todo.id).toBe(todo.id);
@@ -236,41 +239,43 @@ it('should return 200 and todo details for valid id', async () => {
 ```
 
 #### ❌ Test Case: ID Không Tồn Tại
+
 ```typescript
 it('should return 404 if todo does not exist', async () => {
   const nonExistentId = 'non-existent-id';
-  
-  const res = await request(app)
-    .get(`/api/todos/${nonExistentId}`);
-  
+
+  const res = await request(app).get(`/api/todos/${nonExistentId}`);
+
   expect(res.status).toBe(404);
   expect(res.body).toHaveProperty('error');
 });
 ```
 
 #### ✅ Test Case: ID Dạng UUID
+
 ```typescript
 it('should handle UUID format correctly', async () => {
-  const todo = await seedTodo({ 
-    title: 'UUID Todo' 
+  const todo = await seedTodo({
+    title: 'UUID Todo',
   });
-  
-  const res = await request(app)
-    .get(`/api/todos/${todo.id}`);
-  
+
+  const res = await request(app).get(`/api/todos/${todo.id}`);
+
   expect(res.status).toBe(200);
   expect(res.body.todo.id).toMatch(
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
   );
 });
 ```
 
 **Request Format:**
+
 ```bash
 GET /api/todos/550e8400-e29b-41d4-a716-446655440000
 ```
 
 **Response (200):**
+
 ```json
 {
   "todo": {
@@ -289,14 +294,15 @@ GET /api/todos/550e8400-e29b-41d4-a716-446655440000
 ---
 
 ### 3. LIST - GET /api/todos
+
 **Mục đích:** Lấy danh sách tất cả công việc
 
 #### ✅ Test Case: Danh Sách Rỗng
+
 ```typescript
 it('should return 200 and empty array if no todos exist', async () => {
-  const res = await request(app)
-    .get('/api/todos');
-  
+  const res = await request(app).get('/api/todos');
+
   expect(res.status).toBe(200);
   expect(res.body.data).toEqual([]);
   expect(res.body.total).toBe(0);
@@ -304,15 +310,15 @@ it('should return 200 and empty array if no todos exist', async () => {
 ```
 
 #### ✅ Test Case: Danh Sách Có Dữ Liệu
+
 ```typescript
 it('should return 200 and list all todos', async () => {
   await seedTodo({ title: 'Todo 1' });
   await seedTodo({ title: 'Todo 2' });
   await seedTodo({ title: 'Todo 3' });
-  
-  const res = await request(app)
-    .get('/api/todos');
-  
+
+  const res = await request(app).get('/api/todos');
+
   expect(res.status).toBe(200);
   expect(res.body.data.length).toBe(3);
   expect(res.body.total).toBe(3);
@@ -320,27 +326,26 @@ it('should return 200 and list all todos', async () => {
 ```
 
 #### 🔍 Test Case: Phân Trang
+
 ```typescript
 it('should handle pagination correctly', async () => {
   // Tạo 5 todos
   for (let i = 1; i <= 5; i++) {
     await seedTodo({ title: `Todo ${i}` });
   }
-  
+
   // Page 1, limit 2
-  const res1 = await request(app)
-    .get('/api/todos?page=1&limit=2');
-  
+  const res1 = await request(app).get('/api/todos?page=1&limit=2');
+
   expect(res1.status).toBe(200);
   expect(res1.body.data.length).toBe(2);
   expect(res1.body.meta.page).toBe(1);
   expect(res1.body.meta.limit).toBe(2);
   expect(res1.body.meta.total).toBe(5);
-  
+
   // Page 2, limit 2
-  const res2 = await request(app)
-    .get('/api/todos?page=2&limit=2');
-  
+  const res2 = await request(app).get('/api/todos?page=2&limit=2');
+
   expect(res2.status).toBe(200);
   expect(res2.body.data.length).toBe(2);
   expect(res2.body.meta.page).toBe(2);
@@ -348,24 +353,24 @@ it('should handle pagination correctly', async () => {
 ```
 
 #### 🔍 Test Case: Lọc Theo Status
+
 ```typescript
 it('should filter by status=completed', async () => {
-  await seedTodo({ 
-    title: 'Todo 1', 
-    status: TodoStatus.completed 
+  await seedTodo({
+    title: 'Todo 1',
+    status: TodoStatus.completed,
   });
-  await seedTodo({ 
-    title: 'Todo 2', 
-    status: TodoStatus.pending 
+  await seedTodo({
+    title: 'Todo 2',
+    status: TodoStatus.pending,
   });
-  await seedTodo({ 
-    title: 'Todo 3', 
-    status: TodoStatus.completed 
+  await seedTodo({
+    title: 'Todo 3',
+    status: TodoStatus.completed,
   });
-  
-  const res = await request(app)
-    .get('/api/todos?status=completed');
-  
+
+  const res = await request(app).get('/api/todos?status=completed');
+
   expect(res.status).toBe(200);
   expect(res.body.data.length).toBe(2);
   res.body.data.forEach((todo: Todo) => {
@@ -375,6 +380,7 @@ it('should filter by status=completed', async () => {
 ```
 
 **Request Format:**
+
 ```bash
 # Danh sách tất cả
 GET /api/todos
@@ -388,6 +394,7 @@ GET /api/todos?userId=user-123
 ```
 
 **Response (200):**
+
 ```json
 {
   "data": [
@@ -419,17 +426,17 @@ GET /api/todos?userId=user-123
 ---
 
 ### 4. UPDATE - PUT /api/todos/:id
+
 **Mục đích:** Cập nhật thông tin công việc
 
 #### ✅ Test Case: Cập Nhật Title Thành Công
+
 ```typescript
 it('should update todo title successfully', async () => {
   const todo = await seedTodo({ title: 'Old Title' });
-  
-  const res = await request(app)
-    .put(`/api/todos/${todo.id}`)
-    .send({ title: 'Updated Title' });
-  
+
+  const res = await request(app).put(`/api/todos/${todo.id}`).send({ title: 'Updated Title' });
+
   expect(res.status).toBe(200);
   expect(res.body.todo.title).toBe('Updated Title');
   expect(res.body.todo.id).toBe(todo.id);
@@ -437,36 +444,34 @@ it('should update todo title successfully', async () => {
 ```
 
 #### ✅ Test Case: Cập Nhật Status
+
 ```typescript
 it('should update todo status to completed', async () => {
-  const todo = await seedTodo({ 
+  const todo = await seedTodo({
     title: 'Test Todo',
-    status: TodoStatus.pending 
+    status: TodoStatus.pending,
   });
-  
-  const res = await request(app)
-    .put(`/api/todos/${todo.id}`)
-    .send({ status: 'completed' });
-  
+
+  const res = await request(app).put(`/api/todos/${todo.id}`).send({ status: 'completed' });
+
   expect(res.status).toBe(200);
   expect(res.body.todo.status).toBe(TodoStatus.completed);
 });
 ```
 
 #### ✅ Test Case: Cập Nhật Nhiều Trường
+
 ```typescript
 it('should update multiple fields at once', async () => {
   const todo = await seedTodo({ title: 'Old' });
   const newDescription = 'Updated description';
-  
-  const res = await request(app)
-    .put(`/api/todos/${todo.id}`)
-    .send({ 
-      title: 'New Title',
-      description: newDescription,
-      status: 'completed'
-    });
-  
+
+  const res = await request(app).put(`/api/todos/${todo.id}`).send({
+    title: 'New Title',
+    description: newDescription,
+    status: 'completed',
+  });
+
   expect(res.status).toBe(200);
   expect(res.body.todo.title).toBe('New Title');
   expect(res.body.todo.description).toBe(newDescription);
@@ -475,46 +480,46 @@ it('should update multiple fields at once', async () => {
 ```
 
 #### ❌ Test Case: Status Không Hợp Lệ
+
 ```typescript
 it('should return 400 if status is invalid', async () => {
   const todo = await seedTodo({ title: 'Test' });
-  
-  const res = await request(app)
-    .put(`/api/todos/${todo.id}`)
-    .send({ status: 'invalid-status' });
-  
+
+  const res = await request(app).put(`/api/todos/${todo.id}`).send({ status: 'invalid-status' });
+
   expect(res.status).toBe(400);
 });
 ```
 
 #### ❌ Test Case: ID Không Tồn Tại
+
 ```typescript
 it('should return 404 if todo does not exist', async () => {
-  const res = await request(app)
-    .put('/api/todos/non-existent-id')
-    .send({ title: 'New Title' });
-  
+  const res = await request(app).put('/api/todos/non-existent-id').send({ title: 'New Title' });
+
   expect(res.status).toBe(404);
 });
 ```
 
 #### ⚙️ Test Case: Cập Nhật DueAt
+
 ```typescript
 it('should update todo dueAt date', async () => {
   const todo = await seedTodo({ title: 'Test' });
   const newDueAt = new Date();
   newDueAt.setDate(newDueAt.getDate() + 5);
-  
+
   const res = await request(app)
     .put(`/api/todos/${todo.id}`)
     .send({ dueAt: newDueAt.toISOString() });
-  
+
   expect(res.status).toBe(200);
   expect(res.body.todo.dueAt).toBeDefined();
 });
 ```
 
 **Request Format:**
+
 ```bash
 PUT /api/todos/550e8400-e29b-41d4-a716-446655440000
 Content-Type: application/json
@@ -528,6 +533,7 @@ Content-Type: application/json
 ```
 
 **Response (200):**
+
 ```json
 {
   "todo": {
@@ -546,71 +552,72 @@ Content-Type: application/json
 ---
 
 ### 5. DELETE - DELETE /api/todos/:id
+
 **Mục đích:** Xóa một công việc
 
 #### ✅ Test Case: Xóa Thành Công
+
 ```typescript
 it('should delete todo successfully', async () => {
   const todo = await seedTodo({ title: 'To Delete' });
-  
-  const res = await request(app)
-    .delete(`/api/todos/${todo.id}`);
-  
+
+  const res = await request(app).delete(`/api/todos/${todo.id}`);
+
   expect(res.status).toBe(200);
   expect(res.body).toHaveProperty('message', 'Todo deleted');
 });
 ```
 
 #### ✅ Test Case: Xác Nhận Todo Đã Bị Xóa
+
 ```typescript
 it('should verify todo is deleted from database', async () => {
   const todo = await seedTodo({ title: 'To Delete' });
-  
-  await request(app)
-    .delete(`/api/todos/${todo.id}`);
-  
+
+  await request(app).delete(`/api/todos/${todo.id}`);
+
   // Cố gắng lấy todo đã xóa
-  const res = await request(app)
-    .get(`/api/todos/${todo.id}`);
-  
+  const res = await request(app).get(`/api/todos/${todo.id}`);
+
   expect(res.status).toBe(404);
 });
 ```
 
 #### ❌ Test Case: Xóa ID Không Tồn Tại
+
 ```typescript
 it('should return 404 when deleting non-existent todo', async () => {
-  const res = await request(app)
-    .delete('/api/todos/non-existent-id');
-  
+  const res = await request(app).delete('/api/todos/non-existent-id');
+
   expect(res.status).toBe(404);
 });
 ```
 
 #### ✅ Test Case: Xóa Không Ảnh Hưởng Todo Khác
+
 ```typescript
 it('should not delete other todos', async () => {
   const todo1 = await seedTodo({ title: 'Todo 1' });
   const todo2 = await seedTodo({ title: 'Todo 2' });
-  
-  await request(app)
-    .delete(`/api/todos/${todo1.id}`);
-  
+
+  await request(app).delete(`/api/todos/${todo1.id}`);
+
   // Kiểm tra todo2 vẫn tồn tại
-  const res = await request(app)
-    .get(`/api/todos/${todo2.id}`);
-  
+  const res = await request(app).get(`/api/todos/${todo2.id}`);
+
   expect(res.status).toBe(200);
   expect(res.body.todo.id).toBe(todo2.id);
 });
 ```
 
 **Request Format:**
+
 ```bash
 DELETE /api/todos/550e8400-e29b-41d4-a716-446655440000
 ```
 
 **Response (200):**
+
 ```json
 {
   "message": "Todo deleted successfully"
@@ -622,11 +629,13 @@ DELETE /api/todos/550e8400-e29b-41d4-a716-446655440000
 ## 🚀 Chạy Test
 
 ### 1. Chạy Tất Cả Test
+
 ```bash
 npm test
 ```
 
 ### 2. Chạy Test Cụ Thể
+
 ```bash
 # Chạy chỉ test file todo
 npm test -- test/todo.test.ts
@@ -639,21 +648,25 @@ npm test -- --testNamePattern="CREATE"
 ```
 
 ### 3. Chạy Test Với Watch Mode
+
 ```bash
 npm test -- --watch
 ```
 
 ### 4. Chạy Test Và Xem Coverage
+
 ```bash
 npm test -- --coverage
 ```
 
 ### 5. Chạy Test Cụ Thể (Test System)
+
 ```bash
 npm run test-system
 ```
 
 ### Ví Dụ Chạy Test
+
 ```bash
 # Chạy tất cả test
 npm test
@@ -684,22 +697,22 @@ npm test
 ### ✅ DO's (Nên Làm)
 
 #### 1. **Cleanup Dữ Liệu Sau Mỗi Test**
+
 ```typescript
 describe('Todo API', () => {
   beforeEach(async () => {
-    await cleanup();  // Xóa dữ liệu cũ
+    await cleanup(); // Xóa dữ liệu cũ
   });
 
   it('should create todo', async () => {
-    const res = await request(app)
-      .post('/api/todos')
-      .send({ title: 'Test' });
+    const res = await request(app).post('/api/todos').send({ title: 'Test' });
     expect(res.status).toBe(201);
   });
 });
 ```
 
 #### 2. **Sử Dụng Descriptive Test Names**
+
 ```typescript
 // ✅ GOOD - Mô tả rõ ràng
 it('should return 400 when title exceeds 255 characters', async () => {
@@ -713,34 +726,35 @@ it('should fail', async () => {
 ```
 
 #### 3. **Test Cả Happy Path Và Error Cases**
+
 ```typescript
 // Happy path
-it('should create todo with valid data', async () => { });
+it('should create todo with valid data', async () => {});
 
 // Error cases
-it('should return 400 if title is missing', async () => { });
-it('should return 400 if title is empty', async () => { });
-it('should return 400 if title exceeds max length', async () => { });
+it('should return 400 if title is missing', async () => {});
+it('should return 400 if title is empty', async () => {});
+it('should return 400 if title exceeds max length', async () => {});
 ```
 
 #### 4. **Seed Data Đầy Đủ**
+
 ```typescript
 const todoWithAllFields = await seedTodo({
   title: 'Complete project',
   description: 'Finish by Friday',
   status: TodoStatus.pending,
   userId: 'user-123',
-  dueAt: Math.floor(new Date('2026-05-20').getTime() / 1000)
+  dueAt: Math.floor(new Date('2026-05-20').getTime() / 1000),
 });
 ```
 
 #### 5. **Verify Response Structure**
+
 ```typescript
 it('should have correct response structure', async () => {
-  const res = await request(app)
-    .post('/api/todos')
-    .send({ title: 'Test' });
-  
+  const res = await request(app).post('/api/todos').send({ title: 'Test' });
+
   expect(res.body).toHaveProperty('todo');
   expect(res.body.todo).toHaveProperty('id');
   expect(res.body.todo).toHaveProperty('title');
@@ -750,32 +764,27 @@ it('should have correct response structure', async () => {
 ```
 
 #### 6. **Test Edge Cases**
+
 ```typescript
 // Whitespace handling
 it('should trim whitespace from title', async () => {
-  const res = await request(app)
-    .post('/api/todos')
-    .send({ title: '  Test Todo  ' });
-  
+  const res = await request(app).post('/api/todos').send({ title: '  Test Todo  ' });
+
   expect(res.body.todo.title).toBe('Test Todo');
 });
 
 // Special characters
 it('should handle special characters in title', async () => {
   const specialTitle = 'Test & <Script> "Todo"';
-  const res = await request(app)
-    .post('/api/todos')
-    .send({ title: specialTitle });
-  
+  const res = await request(app).post('/api/todos').send({ title: specialTitle });
+
   expect(res.status).toBe(201);
 });
 
 // Unicode
 it('should handle unicode characters', async () => {
-  const res = await request(app)
-    .post('/api/todos')
-    .send({ title: '🎯 Nhiệm vụ Tiếng Việt' });
-  
+  const res = await request(app).post('/api/todos').send({ title: '🎯 Nhiệm vụ Tiếng Việt' });
+
   expect(res.status).toBe(201);
 });
 ```
@@ -783,6 +792,7 @@ it('should handle unicode characters', async () => {
 ### ❌ DON'Ts (Không Nên)
 
 #### 1. **Không Để Dữ Liệu Từ Test Trước Ảnh Hưởng Test Sau**
+
 ```typescript
 // ❌ BAD
 describe('Todo API', () => {
@@ -816,10 +826,11 @@ describe('Todo API', () => {
 ```
 
 #### 2. **Không Hardcode Magic Strings/Numbers**
+
 ```typescript
 // ❌ BAD
 it('should validate title length', async () => {
-  const longTitle = 'a'.repeat(256);  // Magic number!
+  const longTitle = 'a'.repeat(256); // Magic number!
   // ...
 });
 
@@ -832,6 +843,7 @@ it('should validate title length', async () => {
 ```
 
 #### 3. **Không Viết Test Quá Dài**
+
 ```typescript
 // ❌ BAD - Test quá phức tạp
 it('should do everything', async () => {
@@ -842,11 +854,12 @@ it('should do everything', async () => {
 });
 
 // ✅ GOOD - Một test một trách nhiệm
-it('should create todo', async () => { });
-it('should update todo status', async () => { });
+it('should create todo', async () => {});
+it('should update todo status', async () => {});
 ```
 
 #### 4. **Không Ignrore Failed Tests**
+
 ```typescript
 // ❌ BAD
 it.skip('should handle error case', async () => {
@@ -863,14 +876,14 @@ it.skip('should handle error case', async () => {
 
 ## 📊 Cheat Sheet - HTTP Status Codes
 
-| Status | Ý Nghĩa | Khi Nào Dùng |
-|--------|---------|-------------|
-| **200** | OK | Request thành công, có response body |
-| **201** | Created | Resource được tạo thành công |
-| **204** | No Content | Request thành công, không có response body |
-| **400** | Bad Request | Validation error, dữ liệu không hợp lệ |
-| **404** | Not Found | Resource không tồn tại |
-| **500** | Server Error | Lỗi server |
+| Status  | Ý Nghĩa      | Khi Nào Dùng                               |
+| ------- | ------------ | ------------------------------------------ |
+| **200** | OK           | Request thành công, có response body       |
+| **201** | Created      | Resource được tạo thành công               |
+| **204** | No Content   | Request thành công, không có response body |
+| **400** | Bad Request  | Validation error, dữ liệu không hợp lệ     |
+| **404** | Not Found    | Resource không tồn tại                     |
+| **500** | Server Error | Lỗi server                                 |
 
 ---
 
@@ -894,20 +907,22 @@ Xem file `test/todo.test.ts` để xem ví dụ hoàn chỉnh của tất cả t
 ### ❓ Vấn Đề: Test Timeout
 
 **Giải Pháp:**
+
 ```typescript
 describe('Todo API', () => {
   // Tăng timeout nếu cần
   jest.setTimeout(10000);
-  
+
   it('should handle slow operation', async () => {
     // ...
-  }, 15000);  // 15 giây timeout cho test này
+  }, 15000); // 15 giây timeout cho test này
 });
 ```
 
 ### ❓ Vấn Đề: Database Connection Error
 
 **Giải Pháp:**
+
 ```bash
 # Đảm bảo database đang chạy
 docker-compose up -d
@@ -919,6 +934,7 @@ echo "DATABASE_URL=postgresql://..."
 ### ❓ Vấn Đề: Test Pass Locally Nhưng Fail Trên CI/CD
 
 **Giải Pháp:**
+
 1. Kiểm tra environment variables
 2. Đảm bảo cleanup() được gọi
 3. Sử dụng `--runInBand` để chạy sequential

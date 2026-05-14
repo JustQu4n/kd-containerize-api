@@ -30,8 +30,8 @@ describe('Todo API', () => {
     });
 
     it('should return 400 if title is an empty string', async () => {
-        const res = await request(app).post('/api/todos').send({ title: '' });
-        expect(res.status).toBe(400);
+      const res = await request(app).post('/api/todos').send({ title: '' });
+      expect(res.status).toBe(400);
     });
 
     it('should return 400 if title exceeds max length', async () => {
@@ -47,13 +47,13 @@ describe('Todo API', () => {
     });
 
     it('should call email service when creating a todo with dueAt', async () => {
-        const dueAt = new Date();
-        dueAt.setDate(dueAt.getDate() + 1);
-        const todoData = { title: 'Todo with due date', dueAt: dueAt.toISOString() };
-        const res = await request(app).post('/api/todos').send(todoData);
-    
-        expect(res.status).toBe(201);
-        expect(EmailUtil.sendEmail).toHaveBeenCalled();
+      const dueAt = new Date();
+      dueAt.setDate(dueAt.getDate() + 1);
+      const todoData = { title: 'Todo with due date', dueAt: dueAt.toISOString() };
+      const res = await request(app).post('/api/todos').send(todoData);
+
+      expect(res.status).toBe(201);
+      expect(EmailUtil.sendEmail).toHaveBeenCalled();
     });
   });
 

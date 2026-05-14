@@ -5,12 +5,7 @@ export class AppError extends Error {
   public readonly code: string;
   public readonly isOperational: boolean;
 
-  constructor(
-    message: string,
-    statusCode: number,
-    code: string,
-    isOperational = true
-  ) {
+  constructor(message: string, statusCode: number, code: string, isOperational = true) {
     super(message);
     this.name = this.constructor.name;
     this.statusCode = statusCode;
@@ -21,7 +16,7 @@ export class AppError extends Error {
     Error.captureStackTrace(this, this.constructor);
   }
 }
-  
+
 // ─── 400 Validation Error ─────────────────────────────────────
 export class ValidationError extends AppError {
   public readonly fields?: Record<string, string[]> | undefined;
@@ -35,9 +30,7 @@ export class ValidationError extends AppError {
 // ─── 404 Not Found Error ──────────────────────────────────────
 export class NotFoundError extends AppError {
   constructor(resource: string, id?: string) {
-    const message = id
-      ? `${resource} with id '${id}' not found`
-      : `${resource} not found`;
+    const message = id ? `${resource} with id '${id}' not found` : `${resource} not found`;
     super(message, 404, ErrorCode.NOT_FOUND);
   }
 }

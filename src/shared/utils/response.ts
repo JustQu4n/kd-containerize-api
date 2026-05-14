@@ -8,7 +8,7 @@ export function sendSuccess<T>(
   res: Response,
   data: T,
   statusCode: number = 200,
-  pagination?: PaginationQuery
+  pagination?: PaginationQuery,
 ): void {
   const correlationId = (res.req as any).reqId || 'unknown';
   const timestamp = new Date().toISOString();
@@ -36,7 +36,7 @@ export function sendError(
   statusCode: number,
   code: string,
   message: string,
-  fields?: Record<string, string[]>
+  fields?: Record<string, string[]>,
 ): void {
   const correlationId = (res.req as any).reqId || 'unknown';
   const timestamp = new Date().toISOString();
@@ -60,19 +60,13 @@ export function sendError(
 /**
  * Store resource data in response locals (for audit logging)
  */
-export function setAuditResource(
-  res: Response,
-  resource: Record<string, unknown>
-): void {
+export function setAuditResource(res: Response, resource: Record<string, unknown>): void {
   res.locals.resource = resource;
 }
 
 /**
  * Store pagination metadata in response locals
  */
-export function setPaginationMeta(
-  res: Response,
-  pagination: PaginationQuery
-): void {
+export function setPaginationMeta(res: Response, pagination: PaginationQuery): void {
   res.locals.pagination = pagination;
 }

@@ -1,16 +1,144 @@
+<<<<<<< HEAD
+version: '3.8'
+=======
 version: "3.8"
+<<<<<<< Updated upstream
+=======
+>>>>>>> 56a1c0220338d0bfd9ce8802249c2f90197e4c19
+>>>>>>> Stashed changes
+
 services:
-  db:
-    image: postgres:15
+  # ─────────────────────────────────────────────────────────────
+  # PostgreSQL Database
+  # ─────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: todos-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: todos
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-todos}
+<<<<<<< Updated upstream
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-todos}"]
+=======
+<<<<<<< HEAD
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-todos}']
+=======
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-todos}"]
+>>>>>>> 56a1c0220338d0bfd9ce8802249c2f90197e4c19
+>>>>>>> Stashed changes
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # ─────────────────────────────────────────────────────────────
+  # Redis Cache
+  # ─────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: todos-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+<<<<<<< Updated upstream
+      test: ["CMD", "redis-cli", "ping"]
+=======
+<<<<<<< HEAD
+      test: ['CMD', 'redis-cli', 'ping']
+=======
+      test: ["CMD", "redis-cli", "ping"]
+>>>>>>> 56a1c0220338d0bfd9ce8802249c2f90197e4c19
+>>>>>>> Stashed changes
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+    command: redis-server --appendonly yes
+
+  # ─────────────────────────────────────────────────────────────
+  # Node.js API
+  # ─────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: todos-api
+    restart: unless-stopped
+    ports:
+<<<<<<< Updated upstream
+      - "${PORT:-3000}:3000"
+=======
+<<<<<<< HEAD
+      - '${PORT:-3000}:3000'
+=======
+      - "${PORT:-3000}:3000"
+>>>>>>> 56a1c0220338d0bfd9ce8802249c2f90197e4c19
+>>>>>>> Stashed changes
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-todos}?schema=public
+      REDIS_URL: redis://redis:6379
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-min-32-chars-long-!!!}
+      JWT_EXPIRY: ${JWT_EXPIRY:-24h}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      RATE_LIMIT_WINDOW_MS: ${RATE_LIMIT_WINDOW_MS:-900000}
+      RATE_LIMIT_MAX_REQUESTS: ${RATE_LIMIT_MAX_REQUESTS:-100}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+      - /app/node_modules
+    networks:
+      - app-network
+    healthcheck:
+<<<<<<< Updated upstream
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+=======
+<<<<<<< HEAD
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
+=======
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+>>>>>>> 56a1c0220338d0bfd9ce8802249c2f90197e4c19
+>>>>>>> Stashed changes
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
 
 volumes:
-  db_data:
+  postgres_data:
+  redis_data:
+
+networks:
+  app-network:
+    driver: bridge
+<<<<<<< Updated upstream
+
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> 56a1c0220338d0bfd9ce8802249c2f90197e4c19
+>>>>>>> Stashed changes

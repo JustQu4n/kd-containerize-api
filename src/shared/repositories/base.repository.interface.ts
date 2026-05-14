@@ -1,6 +1,4 @@
-import { PaginationQuery } from "../types";
-
-
+import { PaginationQuery } from '../types';
 
 /**
  * Generic Repository Interface
@@ -23,7 +21,7 @@ export interface IRepository<T, CreateDTO, UpdateDTO> {
    */
   findMany(
     filters?: Record<string, unknown>,
-    pagination?: { page: number; limit: number }
+    pagination?: { page: number; limit: number },
   ): Promise<{ data: T[]; meta: PaginationQuery }>;
 
   /**
@@ -58,7 +56,7 @@ export interface IRepository<T, CreateDTO, UpdateDTO> {
 export function calculatePaginationMeta(
   page: number,
   limit: number,
-  total: number
+  total: number,
 ): PaginationQuery {
   const totalPages = Math.ceil(total / limit);
   return {

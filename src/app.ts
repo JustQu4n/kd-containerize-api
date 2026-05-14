@@ -6,10 +6,10 @@ import {
   requestLoggerMiddleware,
   errorHandlerMiddleware,
   mockAuthMiddleware,
-} from '@/infrastructure/middleware';
-import { NotFoundError } from '@/infrastructure/errors';
-import { getEnv } from '@/config/env';
-import { createTodoRoutes } from '@/modules/todos';
+} from './infrastructure/middleware';
+import { NotFoundError } from './infrastructure/errors';
+import { getEnv } from './config/env';
+import { createTodoRoutes } from './modules/todos';
 
 const app = express();
 
@@ -56,11 +56,10 @@ app.use('/api/todos', createTodoRoutes());
 // ── 404 Handler — catches undefined routes ────────────────────
 app.use((req: Request, _res: Response, next: NextFunction) => {
   next(
-    new NotFoundError(
-      'Route',
-      `${req.method} ${req.originalUrl}`,
-      { method: req.method, path: req.originalUrl }
-    )
+    new NotFoundError('Route', `${req.method} ${req.originalUrl}`, {
+      method: req.method,
+      path: req.originalUrl,
+    }),
   );
 });
 

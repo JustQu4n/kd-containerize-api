@@ -12,7 +12,12 @@ export class SuccessResponseDto<T> {
   correlationId: string;
   timestamp: string;
 
-  constructor(data: T, statusCode: number = 200, correlationId: string = '', timestamp: string = new Date().toISOString()) {
+  constructor(
+    data: T,
+    statusCode: number = 200,
+    correlationId: string = '',
+    timestamp: string = new Date().toISOString(),
+  ) {
     this.statusCode = statusCode;
     this.data = data;
     this.correlationId = correlationId;
@@ -38,7 +43,7 @@ export class ErrorResponseDto {
     message: string,
     correlationId: string = '',
     timestamp: string = new Date().toISOString(),
-    fields: Record<string, string[]> | undefined
+    fields: Record<string, string[]> | undefined,
   ) {
     this.statusCode = statusCode;
     this.code = code;

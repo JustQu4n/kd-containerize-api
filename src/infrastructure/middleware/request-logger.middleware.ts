@@ -2,15 +2,11 @@ import { Request, Response, NextFunction } from 'express';
 
 /**
  * Request/Response Logging Middleware
- * 
+ *
  * Logs all HTTP requests and their responses
  * Records: method, URL, status code, duration, response size
  */
-export function requestLoggerMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void {
+export function requestLoggerMiddleware(req: Request, res: Response, next: NextFunction): void {
   const startTime = Date.now();
   const log = req.log;
 
@@ -23,7 +19,7 @@ export function requestLoggerMiddleware(
       userAgent: req.get('user-agent'),
       userId: req.user?.userId,
     },
-    'Incoming request'
+    'Incoming request',
   );
 
   // Intercept response to log it
@@ -45,7 +41,7 @@ export function requestLoggerMiddleware(
         responseSize: `${responseSize}B`,
         userId: req.user?.userId,
       },
-      `${req.method} ${req.originalUrl} ${statusCode}`
+      `${req.method} ${req.originalUrl} ${statusCode}`,
     );
   };
 

@@ -1,17 +1,14 @@
 import { ZodError, ZodSchema } from 'zod';
-import { ValidationError } from '@/infrastructure/errors';
+import { ValidationError } from '../../infrastructure/errors';
 
 /**
  * Validate data against Zod schema
  * Throws ValidationError if validation fails
- * 
+ *
  * Usage:
  * const validated = validateDto(data, CreateTodoSchema);
  */
-export function validateDto<T>(
-  data: unknown,
-  schema: ZodSchema
-): T {
+export function validateDto<T>(data: unknown, schema: ZodSchema): T {
   try {
     return schema.parse(data) as T;
   } catch (err) {
@@ -35,14 +32,14 @@ export function validateDto<T>(
 /**
  * Safe validation - returns result object
  * Useful when you need to handle validation without throwing
- * 
+ *
  * Usage:
  * const result = safeScan(data, CreateTodoSchema);
  * if (!result.success) { ... }
  */
 export function safeValidate<T>(
   data: unknown,
-  schema: ZodSchema
+  schema: ZodSchema,
 ): { success: true; data: T } | { success: false; errors: Record<string, string[]> } {
   try {
     const validated = schema.parse(data) as T;

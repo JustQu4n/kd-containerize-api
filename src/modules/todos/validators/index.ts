@@ -14,16 +14,18 @@ export const CreateTodoDtoSchema = z
     title: z
       .string()
       .min(TodoValidation.title.minLength, 'Title is required')
-      .max(TodoValidation.title.maxLength, `Title must be at most ${TodoValidation.title.maxLength} characters`),
+      .max(
+        TodoValidation.title.maxLength,
+        `Title must be at most ${TodoValidation.title.maxLength} characters`,
+      ),
     description: z
       .string()
-      .max(TodoValidation.description.maxLength, `Description must be at most ${TodoValidation.description.maxLength} characters`)
+      .max(
+        TodoValidation.description.maxLength,
+        `Description must be at most ${TodoValidation.description.maxLength} characters`,
+      )
       .optional(),
-    dueAt: z
-      .number()
-      .int()
-      .positive('Due date must be a valid Unix timestamp')
-      .optional(),
+    dueAt: z.number().int().positive('Due date must be a valid Unix timestamp').optional(),
     userId: z.string().min(1, 'User ID is required'),
   })
   .strict();
@@ -38,16 +40,9 @@ export const UpdateTodoDtoSchema = z
       .min(TodoValidation.title.minLength)
       .max(TodoValidation.title.maxLength)
       .optional(),
-    description: z
-      .string()
-      .max(TodoValidation.description.maxLength)
-      .nullish(),
+    description: z.string().max(TodoValidation.description.maxLength).nullish(),
     status: TodoStatusSchema.optional(),
-    dueAt: z
-      .number()
-      .int()
-      .positive()
-      .nullish(),
+    dueAt: z.number().int().positive().nullish(),
   })
   .strict();
 

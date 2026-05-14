@@ -1,22 +1,18 @@
 import { Logger } from 'pino';
-import { getRootLogger } from '@/infrastructure/logger/logger';
+import { getRootLogger } from '../../infrastructure/logger/logger';
 import { IRepository } from '../repositories';
 
 /**
  * Base Service Class
- * 
+ *
  * Provides:
  * - Dependency injection for repository
  * - Logger support
  * - Standard service lifecycle methods
- * 
+ *
  * All services should extend this
  */
-export abstract class BaseService<
-  Entity,
-  CreateDTO,
-  UpdateDTO
-> {
+export abstract class BaseService<Entity, CreateDTO, UpdateDTO> {
   protected logger: Logger;
 
   constructor(protected readonly repository: IRepository<Entity, CreateDTO, UpdateDTO>) {

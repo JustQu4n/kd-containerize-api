@@ -1,6 +1,6 @@
+import { IRepository } from '../../../shared/repositories';
 import { TodoEntity } from '../domain';
 import { CreateTodoDto, UpdateTodoDto } from '../dto';
-import { IRepository } from '@/shared/repositories';
 
 /**
  * Todo Repository Interface
@@ -17,7 +17,7 @@ export interface ITodoRepository extends IRepository<TodoEntity, CreateTodoDto, 
    */
   findByUserIdPaginated(
     userId: string,
-    pagination?: { page: number; limit: number }
+    pagination?: { page: number; limit: number },
   ): Promise<{ data: TodoEntity[]; total: number }>;
 
   /**
