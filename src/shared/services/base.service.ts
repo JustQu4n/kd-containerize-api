@@ -1,5 +1,5 @@
 import { Logger } from 'pino';
-import { getRootLogger } from '@/infrastructure/logger/logger';
+import { getRootLogger } from '../../infrastructure/logger/logger';
 import { IRepository } from '../repositories';
 
 /**

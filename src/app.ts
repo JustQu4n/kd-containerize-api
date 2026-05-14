@@ -6,10 +6,10 @@ import {
   requestLoggerMiddleware,
   errorHandlerMiddleware,
   mockAuthMiddleware,
-} from '@/infrastructure/middleware';
-import { NotFoundError } from '@/infrastructure/errors';
-import { getEnv } from '@/config/env';
-import { createTodoRoutes } from '@/modules/todos';
+} from './infrastructure/middleware';
+import { NotFoundError } from './infrastructure/errors';
+import { getEnv } from './config/env';
+import { createTodoRoutes } from './modules/todos';
 
 const app = express();
 

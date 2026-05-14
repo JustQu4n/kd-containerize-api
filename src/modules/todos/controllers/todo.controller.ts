@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-
-import { sendSuccess, setAuditResource } from '@/shared/utils';
-import { ValidationError } from '@/errors';
-import { CreateTodoDto, TodoStatus, UpdateTodoDto, VALID_STATUSES } from '@/types';
 import { TodoService } from '../services/todo.service';
+import { sendSuccess, setAuditResource } from '../../../shared/utils';
+import { ValidationError } from '../../../errors';
+import { CreateTodoDto, UpdateTodoDto } from '../dto';
+import { TodoStatus, VALID_STATUSES } from '../../../types';
 
 
 
